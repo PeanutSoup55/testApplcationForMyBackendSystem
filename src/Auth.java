@@ -26,6 +26,10 @@ public class Auth {
         public String getLast_name() { return last_name; }
         public int getDepartment_id() { return department_id; }
         public String getHired_date() { return hired_date; }
+
+        public String details(){
+            return "Email: " + editedEmail + "\nFirst Name: " + first_name + "\nLast Name: " + last_name + "\nDepartment: " + department_id + "\nHire Date: " + hired_date;
+        }
     }
 
     public static User login(String editedEmail, String plainPassword) throws SQLException {
@@ -35,8 +39,8 @@ public class Auth {
             ps.setString(1, editedEmail);
             ResultSet rs = ps.executeQuery();
             if (!rs.next()) return null;
-            String hash = rs.getString("password");
-            if (!BCrypt.checkpw(plainPassword, hash)) return null;
+            String dbPassword = rs.getString("password");
+            if (!plainPassword.equals(dbPassword)) return null;
             return new User(
                     rs.getString("editedEmail"),
                     rs.getString("first_name"),
