@@ -39,8 +39,8 @@ public class Auth {
             ps.setString(1, editedEmail);
             ResultSet rs = ps.executeQuery();
             if (!rs.next()) return null;
-            String dbPassword = rs.getString("password");
-            if (!plainPassword.equals(dbPassword)) return null;
+            String hash = rs.getString("password");
+            if (!BCrypt.checkpw(plainPassword, hash)) return null;
             return new User(
                     rs.getString("editedEmail"),
                     rs.getString("first_name"),
@@ -49,6 +49,10 @@ public class Auth {
                     rs.getString("hired_date")
             );
         }
+    }
+
+    public static void MakeUser(String email, String name, String lastName, int departmentId, Date hireDate, String password) throws  SQLException{
+        String query = "INSERT INTO "
     }
 
     public static String hashPassword(String plain) {

@@ -5,7 +5,7 @@ void main() throws SQLException {
     System.out.println("Login System");
     System.out.print("Email: ");
     String email = s.next();
-    System.out.print("\nPassword: ");
+    System.out.print("Password: ");
     String password = s.next();
 
     Auth.User user = Auth.login(email, password);
