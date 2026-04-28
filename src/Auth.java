@@ -1,4 +1,4 @@
-
+`
 import org.mindrot.jbcrypt.BCrypt;
 import java.sql.*;
 
@@ -51,8 +51,18 @@ public class Auth {
         }
     }
 
-    public static void MakeUser(String email, String name, String lastName, int departmentId, Date hireDate, String password) throws  SQLException{
-        String query = "INSERT INTO "
+    public static void MakeUser(String email, String name, String lastName, int departmentId, Date hireDate, String password) throws SQLException {
+        String query = "INSERT INTO `company`.`editedemployees` (`editedEmail`, `first_name`, `last_name`, `department_id`, `hired_date`, `password`) VALUES (?, ?, ?, ?, ?, ?)";
+        String hashedPassword = hashPassword(password);
+        try (Connection conn = DriverManager.getConnection(Creds.getURL(), Creds.getUSER(), Creds.getPASS()); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, email);
+            ps.setString(2, name);
+            ps.setString(3, lastName);
+            ps.setInt(4, departmentId);
+            ps.setDate(5, hireDate);
+            ps.setString(6, hashedPassword);
+            ps.executeUpdate();
+        }
     }
 
     public static String hashPassword(String plain) {
